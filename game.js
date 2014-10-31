@@ -1,18 +1,9 @@
-
-
-function processInput() {
-}
-
-function processPhysics() {
-}
-
-function draw() {
-}
+var world = new World();
 
 function gameLoop() {
     processInput();
     processPhysics();
-    draw();
+    draw(world);
 }
 
 setInterval(gameLoop, 60/1000);
