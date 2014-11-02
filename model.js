@@ -2,7 +2,7 @@
 var Player = function() {
 	this.pos = new Vector2d(1280/2, 720/2);
 	this.angle = 0;
-
+	this.mov = new Vector2d(0,0);
 }
 
 var World = function(){
@@ -14,6 +14,18 @@ var World = function(){
 var Vector2d = function(x,y) {
 	this.x = x;
 	this.y = y;
+}
+Vector2d.prototype.distanceTo = function (v2){
+	var dx = Math.Abs(this.x - v2.x);
+	var dy = Math.Abs(this.y - v2.y);
+	return Math.sqrt(dx^2 + dy^2);
+}
+
+Vector2d.prototype.length = Math.sqrt(this.x^2 + this.y^2);
+
+Vector2d.prototype.normalize = function(){
+	var l = this.length;	
+	return this.scale(1/l);
 }
 
 Vector2d.prototype.rotate = function(angle, origin){
@@ -38,8 +50,8 @@ Vector2d.prototype.scale = function(factor){
 	return this;
 }
 Vector2d.prototype.translate = function(vectorB){
-	this.x += vectorB.x;
-	this.y += vectorB.y;
+	this.x += vectorB.x % 1280;
+	this.y += vectorB.y % 720;
 	return this;
 }
 Vector2d.prototype.copy = function(){
