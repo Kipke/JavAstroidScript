@@ -1,7 +1,7 @@
 var world = new World();
 
 function gameLoop() {
-    processInput();
+    processInput(world);
     processPhysics();
     draw(world);
 }
