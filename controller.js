@@ -28,7 +28,7 @@ function processInput(world) {
 	}
 	if (keysHeld[32]) {
 		// shoot
-		if(world.player.charge >= 10){
+		if(world.player.charge >= world.player.fireRate){
 			world.lasers.push(new Laser(world.player.pos.copy(),world.player.mov.copy(),world.player.angle));
 			world.player.charge = 0;
 		}		
@@ -39,7 +39,7 @@ function processPhysics(world) {
 	// move forward
 	world.player.pos.translate(world.player.mov);
 	// update the player charge
-	if(world.player.charge < 10  ){
+	if(world.player.charge < world.player.fireRate){
 		world.player.charge++;
 	}
 	// update the lasers

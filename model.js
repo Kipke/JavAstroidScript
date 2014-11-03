@@ -1,12 +1,12 @@
-
 var Player = function() {
 	this.pos = new Vector2d(1280/2, 720/2);
 	this.angle = 0;
 	this.mov = new Vector2d(0,0);
 	this.maxSpeed = 5;
 	this.accelerate = 0.25;
-	this.rotateRate = (1/32) * Math.PI;	
-	this.charge = 10;
+	this.rotateRate = (1/32) * Math.PI;		
+	this.fireRate = 10;
+	this.charge = this.fireRate;
 }
 
 var Laser = function(position, movement, a) {
