@@ -10,27 +10,44 @@ document.addEventListener('keyup', function(e){
 function processInput(world) {
 	if (keysHeld[37]) {
 		// move left
-		world.player.angle -= 0.02;
+		world.player.angle -= world.player.rotateRate;
 	}
 	if (keysHeld[39]) {
 		// move right
-		world.player.angle += 0.02;
+		world.player.angle += world.player.rotateRate;
 	}
 	if (keysHeld[38]) {
-		// change movement vector		
-		world.player.mov.move(0.05,(Math.PI *2) - world.player.angle);		
-		var t = 1.4 / world.player.mov.length;		
-		world.player.mov.scale(t);		
-		//world.player.mov.normalize();
+		// change movement vector				
+		world.player.mov.move(world.player.accelerate,(Math.PI *2) - world.player.angle);		
+		// limit the size of the movement vector
+		if(world.player.mov.length() > world.player.maxSpeed){
+			world.player.mov.scale(world.player.maxSpeed / world.player.mov.length());
+		}
+
 
 	}
 	if (keysHeld[32]) {
 		// shoot
+		if(world.player.charge >= 10){
+			world.lasers.push(new Laser(world.player.pos.copy(),world.player.mov.copy(),world.player.angle));
+			world.player.charge = 0;
+		}		
 	}
 }
 
 function processPhysics(world) {
 	// move forward
 	world.player.pos.translate(world.player.mov);
-	var p = world.player.pos;	
+	// update the player charge
+	if(world.player.charge < 10  ){
+		world.player.charge++;
+	}
+	// update the lasers
+	world.lasers.map(function(x){
+		x.pos.translate(x.mov);
+		x.charge--;
+	});
+	world.lasers = world.lasers.filter(function(x){
+		return x.charge > 0;
+	});
 }

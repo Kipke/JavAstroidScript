@@ -6,4 +6,4 @@ function gameLoop() {
     draw(world);
 }
 
-setInterval(gameLoop, 60/1000);
+setInterval(gameLoop, 1000/60);

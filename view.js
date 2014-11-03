@@ -1,7 +1,7 @@
 var draw = (function(context){
 
 	function drawPlayer(player){
-		context.fillStyle = 'white';
+		//context.fillStyle = 'white';
 		//context.strokeStyle = 'white';
 		
 		var playerModel = new VectorList([[0,0],[1,-1],[0,2],[-1,-1]]);
@@ -12,10 +12,19 @@ var draw = (function(context){
 
 	}
 
+	function drawLaser(laser){
+		//context.fillStyle = 'white';
+		var laserModel = new VectorList([[0,0],[1,-1],[0,2],[-1,-1]]);		
+		laserModel.apply('scale',5);
+		laserModel.apply('rotate',laser.angle,new Vector2d(0,0));
+		laserModel.apply('translate',laser.pos);
+		drawPath('green',laserModel.vectors);
+	}
+
 	return function (world){
 		var t = Vector2d(10,10);
 		context.clearRect(0,0,world.width, world.height)
-		
+		world.lasers.map(drawLaser);
 		drawPlayer(world.player);
 	};
 

@@ -3,10 +3,23 @@ var Player = function() {
 	this.pos = new Vector2d(1280/2, 720/2);
 	this.angle = 0;
 	this.mov = new Vector2d(0,0);
+	this.maxSpeed = 5;
+	this.accelerate = 0.25;
+	this.rotateRate = (1/32) * Math.PI;	
+	this.charge = 10;
+}
+
+var Laser = function(position, movement, a) {
+	this.pos = position;
+	this.angle = a;	
+	this.maxSpeed = 10;
+	this.mov = movement.move(this.maxSpeed,(Math.PI *2) - this.angle);
+	this.charge = 100;
 }
 
 var World = function(){
 	this.player = new Player();
+	this.lasers = [];	
 	this.width = 1280;
 	this.height = 720;
 }
@@ -21,7 +34,11 @@ Vector2d.prototype.distanceTo = function (v2){
 	return Math.sqrt(dx^2 + dy^2);
 }
 
-Vector2d.prototype.length = Math.sqrt(this.x^2 + this.y^2);
+//Vector2d.prototype.length = Math.sqrt((this.x)^2 + ((this.y)^2));
+
+Vector2d.prototype.length = function(){
+	return Math.sqrt(Math.abs(this.x)^2 + Math.abs(this.y)^2);
+}
 
 Vector2d.prototype.normalize = function(){
 	var l = this.length;	
@@ -49,9 +66,9 @@ Vector2d.prototype.scale = function(factor){
 	this.y *= factor;
 	return this;
 }
-Vector2d.prototype.translate = function(vectorB){
-	this.x += vectorB.x % 1280;
-	this.y += vectorB.y % 720;
+Vector2d.prototype.translate = function(vector){
+	this.x += vector.x % 1280;
+	this.y += vector.y % 720;
 	return this;
 }
 Vector2d.prototype.copy = function(){
