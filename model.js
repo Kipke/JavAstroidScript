@@ -28,18 +28,17 @@ var Vector2d = function(x,y) {
 	this.x = x;
 	this.y = y;
 }
-Vector2d.prototype.distanceTo = function (v2){
-	var dx = Math.Abs(this.x - v2.x);
-	var dy = Math.Abs(this.y - v2.y);
-	return Math.sqrt(dx^2 + dy^2);
-}
-
-//Vector2d.prototype.length = Math.sqrt((this.x)^2 + ((this.y)^2));
 
 Vector2d.prototype = {
 	get length(){
 		return Math.sqrt(Math.abs(this.x)^2 + Math.abs(this.y)^2);
 	}
+}
+
+Vector2d.prototype.distanceTo = function (v2){
+	var dx = Math.Abs(this.x - v2.x);
+	var dy = Math.Abs(this.y - v2.y);
+	return Math.sqrt(dx^2 + dy^2);
 }
 
 Vector2d.prototype.length = function(){
@@ -73,14 +72,13 @@ Vector2d.prototype.scale = function(factor){
 	return this;
 }
 Vector2d.prototype.translate = function(vector){
-	this.x = (this.x + vector.x) % 1280;
-	this.y = (this.y + vector.y) % 720;
+	this.x = (this.x + vector.x);
+	this.y = (this.y + vector.y);
 	return this;
 }
 Vector2d.prototype.copy = function(){
 	return new Vector2d(this.x, this.y);
-};
-
+}
 
 var VectorList = function(vectors){
 	this.vectors = vectors.map(function(v){

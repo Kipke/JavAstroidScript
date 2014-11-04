@@ -35,7 +35,7 @@ function processInput(world) {
 
 function processPhysics(world) {
 	// move forward
-	world.player.pos.translate(world.player.mov);
+	wrapAround(world,world.player.pos.translate(world.player.mov));
 	// apply the drag
 	if(world.player.mov.length > 0){
 		//world.player.mov.move(-0.05,(Math.PI *2) - world.player.angle);
@@ -47,10 +47,26 @@ function processPhysics(world) {
 	}
 	// update the lasers
 	world.lasers.map(function(x){
-		x.pos.translate(x.mov);
+		wrapAround(world,x.pos.translate(x.mov));
 		x.charge--;
 	});
 	world.lasers = world.lasers.filter(function(x){
 		return x.charge > 0;
 	});
+}
+
+function wrapAround(world,vector){
+	if(vector.x < 0){
+		vector.x += world.width;		
+	}
+	if(vector.x > world.width){
+		vector.x -= world.width;
+	}
+	if(vector.y < 0){
+		vector.y += world.height;		
+	}
+	if(vector.y > world.height){
+		vector.y -= world.height;
+	}
+	return vector;
 }
