@@ -2,9 +2,11 @@ var Player = function() {
 	this.pos = new Vector2d(1280/2, 720/2);
 	this.angle = 0;
 	this.mov = new Vector2d(0,0);
-	this.maxSpeed = 5;
+	this.maxSpeed = 10;
+	this.minSpeed = 0.001;
 	this.accelerate = 0.25;
 	this.rotateRate = (1/32) * Math.PI;		
+	this.dragRate = 0.1;	
 	this.fireRate = 10;
 	this.charge = this.fireRate;
 }
@@ -31,18 +33,14 @@ var Vector2d = function(x,y) {
 
 Vector2d.prototype = {
 	get length(){
-		return Math.sqrt(Math.abs(this.x)^2 + Math.abs(this.y)^2);
+		return Math.sqrt(Math.pow(this.x,2) + Math.pow(this.y,2));
 	}
 }
 
 Vector2d.prototype.distanceTo = function (v2){
 	var dx = Math.Abs(this.x - v2.x);
 	var dy = Math.Abs(this.y - v2.y);
-	return Math.sqrt(dx^2 + dy^2);
-}
-
-Vector2d.prototype.length = function(){
-	return Math.sqrt(Math.abs(this.x)^2 + Math.abs(this.y)^2);
+	return Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
 }
 
 Vector2d.prototype.normalize = function(){
@@ -72,8 +70,8 @@ Vector2d.prototype.scale = function(factor){
 	return this;
 }
 Vector2d.prototype.translate = function(vector){
-	this.x = (this.x + vector.x);
-	this.y = (this.y + vector.y);
+	this.x += vector.x;
+	this.y += vector.y;
 	return this;
 }
 Vector2d.prototype.copy = function(){

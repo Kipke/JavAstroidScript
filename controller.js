@@ -8,42 +8,49 @@ document.addEventListener('keyup', function(e){
 });
 
 function processInput(world) {
+	var p = world.player;
 	if (keysHeld[37]) {
 		// move left
-		world.player.angle -= world.player.rotateRate;
+		p.angle -= p.rotateRate;
 	}
 	if (keysHeld[39]) {
 		// move right
-		world.player.angle += world.player.rotateRate;
+		p.angle += p.rotateRate;
 	}
 	if (keysHeld[38]) {
 		// change movement vector				
-		world.player.mov.move(world.player.accelerate,(Math.PI *2) - world.player.angle);		
+		p.mov.move(p.accelerate,(Math.PI *2) - p.angle);		
 		// limit the size of the movement vector
-		if(world.player.mov.length > world.player.maxSpeed){
-		 	world.player.mov.scale(world.player.maxSpeed / world.player.mov.length);
+		if(p.mov.length > p.maxSpeed){
+		 	p.mov.scale(p.maxSpeed / p.mov.length);
+		}
+	}
+	if(!keysHeld[38]){
+		// if there is no thrust, apply drag
+		if(p.mov.length > p.minSpeed){			
+			var vInv = p.mov.copy().scale(-1).normalize().scale(p.dragRate);			
+			p.mov.translate(vInv);
+		}
+		else{
+			p.mov = new Vector2d(0,0);
 		}
 	}
 	if (keysHeld[32]) {
 		// shoot
-		if(world.player.charge >= world.player.fireRate){
-			world.lasers.push(new Laser(world.player.pos.copy(),world.player.mov.copy(),world.player.angle));
-			world.player.charge = 0;
+		if(p.charge >= p.fireRate){
+			world.lasers.push(new Laser(p.pos.copy(),p.mov.copy(),p.angle));
+			p.charge = 0;
 		}		
 	}
 }
 
 function processPhysics(world) {
+	var p = world.player;
 	// move forward
-	wrapAround(world,world.player.pos.translate(world.player.mov));
-	// apply the drag
-	if(world.player.mov.length > 0){
-		//world.player.mov.move(-0.05,(Math.PI *2) - world.player.angle);
-		world.player.mov.scale(0.99);
-	}
+	wrapAround(world,p.pos.translate(p.mov));
 	// update the player charge
-	if(world.player.charge < world.player.fireRate){
-		world.player.charge++;
+	if(p.charge < p.fireRate){
+		p.charge++;
 	}
 	// update the lasers
 	world.lasers.map(function(x){
@@ -53,6 +60,11 @@ function processPhysics(world) {
 	world.lasers = world.lasers.filter(function(x){
 		return x.charge > 0;
 	});
+}
+
+function applyDrag(vector){
+	var vInv = vector.copy().scale(-1).normalize().scale(0.25);
+	vector.translate(vInv);
 }
 
 function wrapAround(world,vector){
