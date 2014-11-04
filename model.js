@@ -36,6 +36,12 @@ Vector2d.prototype.distanceTo = function (v2){
 
 //Vector2d.prototype.length = Math.sqrt((this.x)^2 + ((this.y)^2));
 
+Vector2d.prototype = {
+	get length(){
+		return Math.sqrt(Math.abs(this.x)^2 + Math.abs(this.y)^2);
+	}
+}
+
 Vector2d.prototype.length = function(){
 	return Math.sqrt(Math.abs(this.x)^2 + Math.abs(this.y)^2);
 }
@@ -67,8 +73,8 @@ Vector2d.prototype.scale = function(factor){
 	return this;
 }
 Vector2d.prototype.translate = function(vector){
-	this.x += vector.x % 1280;
-	this.y += vector.y % 720;
+	this.x = (this.x + vector.x) % 1280;
+	this.y = (this.y + vector.y) % 720;
 	return this;
 }
 Vector2d.prototype.copy = function(){
