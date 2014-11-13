@@ -52,13 +52,17 @@ function processPhysics(world) {
 	if(p.charge < p.fireRate){
 		p.charge++;
 	}
-	// update the lasers
+	// move the lasers and update the charge
 	world.lasers.map(function(x){
 		wrapAround(world,x.pos.translate(x.mov));
 		x.charge--;
 	});
 	world.lasers = world.lasers.filter(function(x){
 		return x.charge > 0;
+	});
+	// move the asteroids
+	world.asteroids.map(function(x){
+		wrapAround(world,x.pos.translate(x.mov));
 	});
 }
 

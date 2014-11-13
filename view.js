@@ -13,6 +13,10 @@ var draw = (function(context){
 							color = 'green';
 							scale = 5;
 							break;
+			case 'asteroid':model = new VectorList(obj.model);
+							color = 'green';
+							scale = obj.scale;
+							break;
 			default: 		return;
 		}
 
@@ -26,8 +30,8 @@ var draw = (function(context){
 		var t = Vector2d(10,10);
 		context.clearRect(0,0,world.width, world.height)
 		world.lasers.map(function(x){ drawModel('laser',x);});
-		//drawPlayer(world.player);
 		drawModel('player',world.player);
+		world.asteroids.map(function(y){ drawModel('asteroid',y);});
 	};
 
 	function drawPath(color,path){
